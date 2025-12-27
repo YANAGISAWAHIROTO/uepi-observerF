@@ -2,115 +2,88 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>UEPI 研究員応募端末</title>
+<title>UEPI 天体観測サイト</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body {
   margin:0;
   padding:0;
   background: radial-gradient(circle at center, #0b0c17, #000010);
-  color:#cfd8ff;
-  font-family:'Segoe UI', sans-serif;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
-  overflow:hidden;
-  position:relative;
+  color: #cfd8ff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
 }
 .container {
-  max-width:600px;
-  width:90%;
-  margin:40px auto;
   background: rgba(0,0,40,0.7);
-  padding:30px;
-  border-radius:15px;
-  box-shadow:0 0 30px #223366;
-  text-align:center;
-  position:relative;
-  z-index:1;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 30px #223366;
+  position: relative;
+  z-index: 1;
 }
-h1 { color:#7fbfff; text-shadow:0 0 10px #7fbfff; }
-input, textarea, select {
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:5px;
-  border:1px solid #3a4a7a;
-  background:#020b1c;
-  color:#cfd8ff;
-  font-size:14px;
+h1 {
+  color: #7fbfff;
+  text-shadow: 0 0 10px #7fbfff;
+}
+input {
+  width: 80%;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 5px;
+  border: 1px solid #3a4a7a;
+  background: #020b1c;
+  color: #cfd8ff;
+  font-size: 16px;
 }
 button {
-  margin-top:20px;
-  width:100%;
-  padding:12px;
-  font-size:16px;
-  background:#4a6b5f;
-  color:white;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-  box-shadow:0 0 10px #4a6b5f;
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  background: #4a6b5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #4a6b5f;
 }
-button:hover { background:#6aa080; box-shadow:0 0 15px #6aa080; }
-.success {
-  margin-top:20px;
-  padding:15px;
-  background:#223322;
-  border-radius:5px;
-  text-align:center;
-  color:#aaffaa;
-  font-weight:bold;
-  display:none;
+button:hover { background:#6aa080; box-shadow: 0 0 15px #6aa080; }
+.message {
+  margin-top: 20px;
+  color: #ffa0a0;
+  font-weight: bold;
 }
 .star {
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:#7fbfff;
-  border-radius:50%;
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #7fbfff;
+  border-radius: 50%;
   animation: twinkle 2s infinite alternate;
 }
 @keyframes twinkle {
-  from { opacity:0.1; }
-  to { opacity:1; }
+  from { opacity: 0.1; }
+  to { opacity: 1; }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>UEPI 研究員応募端末</h1>
-  <p>下記フォームに必要事項を入力してください。命の危険等は保証できません。</p>
+  <h1>天体観測サイト</h1>
+  <p>只今回線状況が安定しておりません。<br>しばらくお待ちください…</p>
 
-  <label>氏名</label>
-  <input type="text" id="name" placeholder="例：山田太郎">
-
-  <label>メールアドレス</label>
-  <input type="email" id="email" placeholder="例：example@mail.com">
-
-  <label>応募理由 / 自己PR</label>
-  <textarea id="reason" rows="4" placeholder="例：怪異現象の観測に興味があります"></textarea>
-
-  <label>心霊スポットなど現場に移動可能か</label>
-  <select id="canMove">
-    <option value="">選択してください</option>
-    <option value="yes">可能</option>
-    <option value="no">不可</option>
-  </select>
-
-  <label>任務内容の同意</label>
-  <select id="agree">
-    <option value="">選択してください</option>
-    <option value="yes">自己責任で同意する</option>
-    <option value="no">同意しない</option>
-  </select>
-
-  <button onclick="submitForm()">応募</button>
-
-  <div class="success" id="success">応募完了。UEPIからの通知をお待ちください。</div>
+  <input type="text" id="password" placeholder="合言葉を入力">
+  <button onclick="checkPassword()">送信</button>
+  <div class="message" id="msg"></div>
 </div>
 
 <script>
@@ -125,30 +98,24 @@ for(let i=0;i<100;i++){
   document.body.appendChild(star);
 }
 
-function submitForm(){
-  const name=document.getElementById("name").value.trim();
-  const email=document.getElementById("email").value.trim();
-  const reason=document.getElementById("reason").value.trim();
-  const canMove=document.getElementById("canMove").value;
-  const agree=document.getElementById("agree").value;
+// 合言葉チェック
+const correctPassword = "UEPISTELLAR-LOG";
 
-  if(!name||!email||!reason||!canMove||!agree){
-    alert("すべての項目を入力・選択してください。");
-    return;
+function checkPassword() {
+  const input = document.getElementById("password").value.trim();
+  const msg = document.getElementById("msg");
+  if(input === correctPassword) {
+    msg.style.color = "#aaffaa";
+    msg.textContent = "合言葉認証成功。応募ページへ移動します…";
+    // 光ノイズ演出
+    document.body.style.background = "#0b101a";
+    setTimeout(()=>{ document.body.style.background = "radial-gradient(circle at center, #0b0c17, #000010)"; }, 300);
+    setTimeout(() => { window.location.href = "index.html"; }, 1500);
+  } else {
+    msg.style.color = "#ff7777";
+    msg.textContent = "合言葉が違います。再入力してください。";
+    document.getElementById("password").value = "";
   }
-
-  document.getElementById("success").style.display="block";
-
-  // 入力欄クリア
-  document.getElementById("name").value="";
-  document.getElementById("email").value="";
-  document.getElementById("reason").value="";
-  document.getElementById("canMove").value="";
-  document.getElementById("agree").value="";
-
-  // 光ノイズ演出
-  document.body.style.background="#0b101a";
-  setTimeout(()=>{document.body.style.background="radial-gradient(circle at center, #0b0c17, #000010)";},200);
 }
 </script>
 
