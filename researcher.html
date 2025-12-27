@@ -54,13 +54,20 @@ button:hover { background:#6aa080; }
   font-weight:bold;
   display:none;
 }
+iframe {
+  margin-top:40px;
+  border:1px solid #3a4a7a;
+  border-radius:5px;
+}
 </style>
 </head>
 <body>
+
 <div class="container">
   <h1>UEPI 研究員応募端末</h1>
   <p>下記フォームに必要事項を入力してください。命の危険等は保証できません。</p>
 
+  <!-- 元のフォーム -->
   <label>氏名</label>
   <input type="text" id="name" placeholder="例：山田太郎">
 
@@ -85,8 +92,12 @@ button:hover { background:#6aa080; }
   </select>
 
   <button onclick="submitForm()">応募</button>
-
   <div class="success" id="success">応募完了。UEPIからの通知をお待ちください。</div>
+
+  <!-- Googleフォーム埋め込み -->
+  <iframe src="コピーしたGoogleフォームURL" width="100%" height="1500" frameborder="0" marginheight="0" marginwidth="0">
+    読み込んでいます…
+  </iframe>
 </div>
 
 <script>
@@ -116,5 +127,6 @@ function submitForm(){
   setTimeout(()=>{document.body.style.background="#0b0c17";},200);
 }
 </script>
+
 </body>
 </html>
